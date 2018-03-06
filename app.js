@@ -1,29 +1,36 @@
 let express = require('express');
 let path = require('path');
-let favicon = require('serve-favicon');
 let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const passport = require('passport');
+
+dotenv.load({ path: '.env.example' });
+const passportConfig = require('./controllers/passport');
 
 let index = require('./routes/index');
 let questions = require('./routes/questions');
 let answers = require('./routes/answers');
 let users = require('./routes/users');
+let auth = require('./routes/auth');
 
 let app = express();
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressValidator());
+app.use(passport.initialize());
 
 app.use('/', index);
 app.use('/api/questions', questions);
 app.use('/api/answers', answers);
-app.use('/users', users);
+app.use('/api/users', users);
+app.use('/api/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
