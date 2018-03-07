@@ -18,6 +18,15 @@ let users = require('./routes/users');
 let auth = require('./routes/auth');
 
 let app = express();
+
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+mongoose.connection.on('error', (err) => {
+  console.error(err);
+  console.log('MongoDB connection error. Please make sure MongoDB is running.');
+  process.exit();
+});
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
