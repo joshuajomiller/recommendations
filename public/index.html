@@ -5,6 +5,25 @@
     <title>Title</title>
 </head>
 <body>
-    here.
+    <textarea id="test" style="width: 100%; height: 300px;"></textarea>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function () {
+        $("#test").on('change keyup paste', function(e) {
+          if (e.keyCode === 13){
+            let value = $("#test").val();
+            $.ajax({
+              method:"post",
+              dataType: "json",
+              url: "/api/test",
+              data: {text: value},
+              success: (function( data ) {
+                console.log( "Data Loaded: " + data );
+              })
+            });
+          }
+        });
+      })
+    </script>
 </body>
 </html>

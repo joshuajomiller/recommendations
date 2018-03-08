@@ -16,16 +16,17 @@ let questions = require('./routes/questions');
 let answers = require('./routes/answers');
 let users = require('./routes/users');
 let auth = require('./routes/auth');
+let test = require('./routes/test');
 
 let app = express();
 
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
-mongoose.connection.on('error', (err) => {
-  console.error(err);
-  console.log('MongoDB connection error. Please make sure MongoDB is running.');
-  process.exit();
-});
+// mongoose.Promise = global.Promise;
+// mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+// mongoose.connection.on('error', (err) => {
+//   console.error(err);
+//   console.log('MongoDB connection error. Please make sure MongoDB is running.');
+//   process.exit();
+// });
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -40,6 +41,7 @@ app.use('/api/questions', questions);
 app.use('/api/answers', answers);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use('/api/test', test);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
