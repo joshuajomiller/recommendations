@@ -20,28 +20,10 @@ class MeaningCloudModel{
         txt: textStr,
         tt: 'eco'
       }).then(function (res) {
-        let topTopics = [];
-        console.log("mc:");
-        res.body = JSON.parse(res.body);
-        res.body.entity_list.forEach(function(entity){
-          if (entity.form.indexOf("https://") === -1 && entity.form.indexOf("@") === -1){
-            topTopics.push(entity)
-          }
-        });
-        let obj = {};
-        topTopics.forEach(function(topic){
-            obj[topic.form] = topic
-        });
-        topTopics = [];
-        for (let key in obj){
-            topTopics.push(obj[key]);
-        }
+        let topTopics = JSON.parse(res.body).entity_list;
         topTopics = topTopics.sort(function(a,b){
           return b.relevance - a.relevance;
         });
-        topTopics = topTopics.slice(0,5);
-
-        console.log(topTopics.map(function(topic){ return topic.form}).join(" | "));
         resolve(topTopics);
       }).catch(function(error){
         reject(error);
@@ -55,20 +37,10 @@ class MeaningCloudModel{
         txt: textStr,
         model: 'IAB_en'
       }).then(function (res) {
-        let topClasses = [];
-        console.log("mc:");
-        console.log(res);
-        res.body = JSON.parse(res.body);
-        let obj = {};
-        res.body.category_list.forEach(function(textClass){
-          obj[textClass.form] = textClass
+        let topClasses = JSON.parse(res.body).category_list;
+        topClasses = topClasses.sort(function(a,b){
+          return b.relevance - a.relevance;
         });
-        topClasses = [];
-        for (let key in obj){
-          if (obj.hasOwnProperty(key)) {
-            topClasses.push(obj[key]);
-          }
-        }
         resolve(topClasses);
       }).catch(function(error){
         console.log(JSON.stringify(error));
